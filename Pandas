@@ -1,0 +1,333 @@
+# https://www.javatpoint.com/python-pandas-dataframe
+# https://www.shanelynn.ie/using-pandas-dataframe-creating-editing-viewing-data-in-python/
+##############################
+# Pandas una volta per tutte #
+#         19/01/2020         #
+##############################
+
+import pandas as pd
+
+# ---------------------------------------------------------------------- #
+# Possibilita' di importazioni di Data Frame (DF)
+# https://www.javatpoint.com/pandas-cheat-sheet
+# ---------------------------------------------------------------------- #
+csv = pd.read_csv   ('191129_sindaciincarica.csv', sep=';', header=None) # csv e' indispenesabile il sep=';' dove ';' e' il delimitatore nel CSV che importi
+                                                                         # In header=N.riga in cui ci sono intestazioni di colonna
+                                                                         # Di default, pd.read_csv usi header=0 (quando il names anche il parametro non è specificato),
+                                                                         # il che significa che la prima riga (cioè indicizzata con 0th) viene interpretata come nome
+                                                                         # di colonna.
+                                                                         # Se i tuoi dati non hanno intestazione, allora usa pd.read_csv(..., header=None)
+                                                                         
+#csv = pd.read_csv   ('191129_sindaciincarica.csv', sep=';', header=None,low_memory=False)#low_memory=False quando ti appare l'errore
+                                                                                          #DtypeWarning: Columns (0,2,3) have mixed types. Specify dtype option on import or set low_memory=False.
+
+                                                                         
+xls = pd.read_excel ('191129_sindaciincarica.xls')                       # excel
+
+import xml.etree.ElementTree as et                                       # + 
+xtree = et.parse("Elenco.xlm")                                           # |
+xroot = xtree.getroot()                                                  # |
+for node in xroot:                                                       # +----> xml
+    s_name = node.attrib.get("name")                                     # |
+    s_mail = node.find("email").text                                     # |
+    s_grade = node.find("grade").text                                    # |
+    s_age = node.find("age").text                                        # +
+# pd.read_csv(filename) : It read the data from CSV file.
+# pd.read_table(filename) : It is used to read the data from delimited text file.
+# pd.read_excel(filename) : It read the data from an Excel file.
+# pd.read_sql(query,connection _object) : It read the data from a SQL table/database.
+# pd.read_json(json _string) : It read the data from a JSON formatted string, URL or file.
+# pd.read_html(url) : It parses an html URL, string or the file and extract the tables to a list of dataframes.
+# pd.read_clipboard() : It takes the contents of clipboard and passes it to the read_table() function.
+# pd.DataFrame(dict) : From the dict, keys for the columns names, values for the data as lists.
+
+    
+    
+# ---------------------------------------------------------------------- #
+# Possibilita' di esportazione di Data Frame (DF)
+# https://www.javatpoint.com/pandas-cheat-sheet
+# ---------------------------------------------------------------------- #
+# df.to_csv(filename): It writes to a CSV file.
+# df.to_excel(filename): It writes to an Excel file.
+# df.to_sql(table_name, connection_object): It writes to a SQL table.
+# df.to_json(filename) : It write to a file in JSON format.
+
+
+
+# ---------------------------------------------------------------------- #
+# Alcune modalita' per fare una prima analisi dei dati
+# https://www.javatpoint.com/pandas-cheat-sheet
+# ---------------------------------------------------------------------- #
+# df.head(n): It returns first n rows of the DataFrame.
+# df.tail(n): It returns last n rows of the DataFrame.
+# df.shape: It returns number of rows and columns.
+# df.info(): It returns index, Datatype, and memory information.
+# s.value_counts(dropna=False): It views unique values and counts.
+# df.apply(pd.Series.value_counts): It refers to the unique values and counts for all the columns.
+# df.describe(percentiles=None, include=None, exclude=None)
+
+
+
+# ---------------------------------------------------------------------- #
+# Selezionare
+# https://www.javatpoint.com/pandas-cheat-sheet
+# ---------------------------------------------------------------------- #
+# df[col1]: It returns column with the label col as Series.
+# df[[col1, col2]]: It returns columns as a new DataFrame.
+# s.iloc[0]: It select by the position.
+# s.loc['index_one']: It select by the index.
+# df.iloc[0,:]: It returns first row.
+# df.iloc[0,0]: It returns the first element of first column.
+# colonna = df2 ['Dipartimento'] # Seleziono una colonna
+
+
+
+# ---------------------------------------------------------------------- #
+# Creare un nuovo DF copiando solo alcune colonne di un DF sorgente
+# ---------------------------------------------------------------------- #
+#crt2 = pd.DataFrame(crt[['Cliente Offertabile','Fine Fornitura']])
+
+
+
+# ---------------------------------------------------------------------- #
+# Stampare una colonna
+# ---------------------------------------------------------------------- #
+print (csv.Data)
+
+# ---------------------------------------------------------------------- #
+# Statistica
+# https://www.javatpoint.com/pandas-cheat-sheet
+# ---------------------------------------------------------------------- #
+# The statistics functions can be applied to a Series, which are as follows:
+# df.describe(): It returns the summary statistics for the numerical columns.
+# df.mean() : It returns the mean of all the columns.
+# df.corr(): It returns the correlation between the columns in the dataframe.
+# df.count(): It returns the count of all the non-null values in each dataframe column.
+# df.max(): It returns the highest value from each of the columns.
+# df.min(): It returns the lowest value from each of the columns.
+# df.median(): It returns the median from each of the columns.
+# df.std(): It returns the standard deviation from each of the columns.
+
+
+
+# ---------------------------------------------------------------------- #
+# Possibilita' di creazione di DF
+# https://www.javatpoint.com/python-pandas-dataframe
+# ---------------------------------------------------------------------- #
+# DF da lista
+x = ['Python', 'Pandas']   
+df1 = pd.DataFrame(x)  
+# DF da Dizionario 
+import pandas as pd  
+info = {'ID' :[101, 102, 103, 106],'Dipartimento' :['Mate.','Tecno.','Fisica','Mate.'], 'Colonna_da_cancellare' :['Vuoto',0,1.5,"Pieno"], 'Medie' : [10,20,30,40]}  
+df2 = pd.DataFrame(info)
+
+
+
+# ---------------------------------------------------------------------- #
+# Aggiungo una colonna
+# ---------------------------------------------------------------------- #
+df2['obbligatorie']= 30
+# Aggiungo una colonna. Le celle verranno riempite con una formula
+df2['obbligatorie_volontarie'] = df2['obbligatorie']+5
+df2['minime'] = df2['obbligatorie_volontarie'] - df2['obbligatorie']
+
+
+# ---------------------------------------------------------------------- #
+# Modifico il contenuto di una cella
+# ---------------------------------------------------------------------- #
+df2.iloc [1,1] = "fabio"
+
+
+
+# ---------------------------------------------------------------------- #
+# Cancello una colonna
+# ---------------------------------------------------------------------- #
+# uso del  
+del df2['Colonna_da_cancellare']  
+# uso pop 
+# df.pop('Colonna_da_cancellare')
+
+
+
+
+# ---------------------------------------------------------------------- #
+# Seleziono una riga attraverso il suo numero di INDICE.
+# Attenzione: nel caso di DF2 l'indice e' stato attributo automaticamente da pandas
+# ---------------------------------------------------------------------- #
+# Uso .loc
+#print (df2.loc[0]) # d approfondire 
+
+# Uso .iloc per estrarre il numero di riga indicato nel indice in []
+#print (df2.iloc[2])
+
+
+
+
+
+
+
+# ---------------------------------------------------------------------- #
+# Slicing di righe attraverso il loro indice
+# ---------------------------------------------------------------------- #
+#print (df2[0:2])                                                         # 0 incluso. 2 escluso
+
+
+
+
+
+
+
+# ---------------------------------------------------------------------- #
+# Aggiungo riga andando a riempire solo alcune colonne.
+# ---------------------------------------------------------------------- #
+# Attenzione: non e' buona norma lasciare celle con contenuto NaN
+# Attenzione: le righe aggiunte hanno un numero di indice che partira' da 0.
+#             Nel caso cancellassi righe facendo riferimento al numero di indice, corri il rischio di cancellare tutte e due.
+#             Se fai un print di df2 vedrai che le due righe che vai ad aggiungere sotto avranno come indice 0 e 1
+df2_ = pd.DataFrame([[104, 'Ita.'], [105, 'Geom.']], columns = ['ID','Dipartimento'])
+df2 = df2.append(df2_, sort=False) # Il sort=False (o True) e' indispensabile per non far tornare un errore nel caso utilizzassi,
+#nel corso del codice, .count()
+
+
+
+# ---------------------------------------------------------------------- #
+# https://www.javatpoint.com/python-pandas-dataframe
+# Molteplici funzioni applicabili ai DF. [Vai in fondo alla pagina]
+
+
+# ---------------------------------------------------------------------- #
+# count () è utilizzato per contare il numero di celle non NAN per ogni colonna o riga.
+# È inoltre adatto a lavorare con i dati NON decimali.
+# Se incontri l'errore: pandas To retain the current behavior and silence the warning, pass 'sort=True'.
+# torna a "Aggiungo riga andando a riempire solo alcune colonne". Troverai la soluzione.
+#print (df2.count())               # Mi restituisce quante CELLE NON NaN contengono le colonne. Il print avra' il nome della colonna e il numero celle NON NaN
+#print (df2.count(axis='columns')) # Mi restituisce quante CELLE NON NaN contengono le colonne. Il print avra' il numero indice della riga e il numero celle NON NaN
+#print (df2.count(axis='rows'))
+#print (df2.count(axis= 0, level=None, numeric_only=True)) # Mi restituisce quante CELLE NON NaN SOLO DI TIPO NUMERICO contengono le colonne.
+                                                          # Il print avra' il nome della colonna e il numero celle NON NaN SOLO DI TIPO NUMERICO
+
+# ---------------------------------------------------------------------- #
+# Describe()
+#print (df2.describe(percentiles=None, include=None, exclude=None))
+
+# ---------------------------------------------------------------------- #
+''' TUTTO DA RIVEDERE '''
+# Groupby 
+# In Pandas, la funzione groupby () ci consente di riorganizzare i dati utilizzandoli su set di dati del mondo reale.
+# Groupby procede con:
+# a) divide i dati in vari gruppi;
+# b) i gruppi sono classificati in base ad alcuni criteri.
+# c) Gli oggetti possono essere divisi da uno qualsiasi dei loro assi.
+
+# Questa operazione consiste nei seguenti passaggi per aggregare / raggruppare i dati:
+# 1) Divisione in set di dati
+# 2) Analisi dei dati
+# 3) Aggregazione o combinazione di dati
+
+# 1) Divisone in set di dati
+# Esistono molti modi per eseguire questa operazione
+# obj.groupby('key')
+# obj.groupby(['key1','key2'])
+# obj.groupby(key,axis=1)
+# Possiamo anche aggiungere alcune funzionalità a ciascun sottoinsieme.
+# Le seguenti operazioni possono essere eseguite sulla funzionalità applicata:
+# ### Aggregation: Calcola la statistica riassuntiva.
+#     È definita come una funzione che restituisce un singolo valore aggregato per ciascuno dei gruppi.
+#     Possiamo eseguire diverse operazioni di aggregazione sui dati raggruppati quando viene creato l'oggetto groupby.
+import numpy as np                    
+grouped = df2.groupby('Dipartimento')  
+print(grouped['Medie'].agg(np.mean),'Media\n')  
+print(grouped['Medie'].agg(np.sum),'Sommo\n') 
+
+#     Transformation: It performs some group-specific operation.
+#     Filtration: It filters the data by discarding it with some condition.
+# ### La funzione filter () filtra i dati definendo alcuni criteri e restituisce il sottoinsieme di dati.
+#grouped = df2.groupby('Dipartimento')  
+#print (df2.groupby('Dipartimento').filter(lambda x: len(x) >= 1))  
+
+# ---------------------------------------------------------------------- #
+# https://www.javatpoint.com/pandas-dataframe-query
+# DataFrame.query()
+# Per analizzare i dati, abbiamo bisogno di molte operazioni di filtro.
+# Panda fornisce un metodo query () per filtrare DataFrame.
+# Offre un modo semplice di effettuare la selezione e anche in grado di semplificare l'attività di selezione basata su indice.
+#print (df2.query('Medie > obbligatorie'),'\n')
+#print (df2[df2.Medie < df2.obbligatorie_volontarie],'\n') 
+#print (df2[df2.Medie == df2['obbligatorie']],'\n')
+
+# ---------------------------------------------------------------------- #
+# https://www.javatpoint.com/pandas-pivot-table
+# DataFrame.pivot_table()
+# Pandas pivot_table () viene utilizzato per calcolare, aggregare e riepilogare i dati.
+# È definito come un potente strumento che aggrega i dati con calcoli come Somma, Conteggio, Media, Max e Min.
+# Inoltre, consente all'utente di ordinare e filtrare i dati quando viene creata la tabella pivot.
+import numpy as np 
+table0= df2.pivot_table(df2, index =['Dipartimento', 'Medie']) # ['colonna i cui dati devono essere aggregati', 'colonna criterio di aggregazione']
+table1 = df2.pivot_table(df2, index =['ID']).agg(np.sum) # ['colonna i cui dati devono essere aggregati', 'colonna criterio di aggregazione']
+print ('Medio la colonna medie aggregando Dipartimenti\n',table0,'\n')
+print ('Sommo tutte le colonne aggregando ID\n',table1,'\n')
+
+
+
+
+
+# ---------------------------------------------------------------------- #
+# Riempio di zero le celle NaN
+# ---------------------------------------------------------------------- #
+df2.fillna(value=0, inplace=True) 
+
+df2.dropna(inplace = True) # CANCELLO tutte le righe che contengono un valore NaA
+
+df2.replace(['Mate.'],'Mat')  
+
+print ('\nDataFrame\n',df2)
+
+
+
+
+
+
+# ---------------------------------------------------------------------- #
+# Se devi cercare, iterando, un valore in una riga di un DF
+# ---------------------------------------------------------------------- #
+for x in range (1, 5):
+    if 106 == df2.iloc[x][0]:
+        print ('\nTrovato')
+    #print (df2.iloc[x][0])
+        
+        
+# ---------------------------------------------------------------------- #
+# Trasformare una cella non-null in non-null datetime64[ns]
+# ---------------------------------------------------------------------- #
+# Bisogna, comunque, creare una colonna nuova dove inseriremo il valore della colonna da trasformare nel valore trasformato in formato daata.
+# csv2['DataCorr'] = pd.to_datetime(csv2['Data'], format='%m/%d/%Y %I:%M:%S %p')
+# datiPM10 ['Data'] = pd.to_datetime(datiPM10['Data'],infer_datetime_format=True)
+# datiPM10 ['DataCORR'] = pd.to_datetime(datiPM10['Data'], format='%d/%m/%Y %I:%M:%S %p') #CORRETTO
+
+
+# ---------------------------------------------------------------------- #
+# Trasformare una cella non-null in str
+# ---------------------------------------------------------------------- #
+# https://towardsdatascience.com/how-to-filter-rows-of-a-pandas-dataframe-by-column-value-51996ea621f8
+# This way uses the contains method. The contains method returns a Boolean array if each string contains the pattern.
+# To use it, you need to enter the name of your DataFrame, then use dot notation to select the appropriate column name
+# of interest, followed by .str and finally contains(). The contains method can also find partial name entries and
+# therefore is incredibly flexible.
+# By default .str.contains is case sensitive. To disregard case sensitivity, simply set the keyword argument case
+# to False, .str.contains(case=False). This adds further flexibility, but must be used with caution.
+
+# ---------------------------------------------------------------------- #
+# FILTRI---------> funziona sicuramente. Non ti restituisce il df correttamente perche', probabilmente, sopra hai tagliato/filtrato colonne
+# ---------------------------------------------------------------------- #
+# https://cmdlinetips.com/2018/02/how-to-sort-pandas-dataframe-by-columns-and-row/
+df2 = df2[df2.Dipartimento == 'Mat']
+df2 = df2 [df2.Medie > 30]
+df2.sort_values('Medie',ascending=False)
+print (df2)
+
+# ---------------------------------------------------------------------- #
+# CANCELLARE COLONNE
+csv = csv.drop(columns="Data")
+# CANCELLARE RIGHE
+csv = csv.drop([0,0],axis=0)
